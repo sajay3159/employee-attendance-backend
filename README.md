@@ -1,4 +1,4 @@
-# employee-attendance-backend
+# Employee Attendance System Backend
 
 A backend system for managing employee attendance with punch-in / punch-out, role-based authentication, and admin analytics.
 
