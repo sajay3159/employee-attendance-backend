@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Attendance API running" });
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/attendance", attendanceRoutes);
 
 export default app;
