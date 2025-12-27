@@ -26,3 +26,43 @@ export const login = async (req, res) => {
     token,
   });
 };
+
+export const createUser = async (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      message: "Name, email and password are required",
+    });
+  }
+
+  if (role && role !== "employee") {
+    return res.status(400).json({
+      message: "Only employee role can be created",
+    });
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({
+      message: "User already exists",
+    });
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    role: "employee",
+  });
+
+  res.status(201).json({
+    message: "Employee created successfully",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+};
