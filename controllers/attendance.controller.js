@@ -3,6 +3,8 @@ import {
   punchInService,
   punchOutService,
 } from "../services/attendance.service.js";
+import dayjs from "dayjs";
+import Attendance from "../models/Attendance.model.js";
 
 export const punchIn = async (req, res) => {
   try {
@@ -36,4 +38,15 @@ export const getAttendance = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+export const getTodayAttendance = async (req, res) => {
+  const today = dayjs().format("YYYY-MM-DD");
+
+  const attendance = await Attendance.findOne({
+    employee: req.user._id,
+    date: today,
+  });
+
+  res.json(attendance || null);
 };

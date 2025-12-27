@@ -12,10 +12,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Health check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", message: "Attendance API running" });
-});
 app.use("/api/auth", authRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/analytics", analyticsRoutes);
