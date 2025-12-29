@@ -1,13 +1,18 @@
-import dayjs from "dayjs";
+import dayjs from "../utils/dayjs.js";
 import businessHours from "../config/businessHours.js";
 
 const calculatePunctuality = (punchInTime) => {
-  const punchIn = dayjs(punchInTime);
+  // Force business timezone
+  const punchIn = dayjs(punchInTime).tz("Asia/Kolkata");
+
+  const [startHour, startMinute] = businessHours.startTime
+    .split(":")
+    .map(Number);
 
   const officeStart = punchIn
     .startOf("day")
-    .hour(Number(businessHours.startTime.split(":")[0]))
-    .minute(Number(businessHours.startTime.split(":")[1]));
+    .hour(startHour)
+    .minute(startMinute);
 
   const graceEnd = officeStart.add(businessHours.graceMinutes, "minute");
 
