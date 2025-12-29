@@ -4,9 +4,11 @@ import businessHours from "../config/businessHours.js";
 const calculatePunctuality = (punchInTime) => {
   const punchIn = dayjs(punchInTime);
 
-  const officeStart = dayjs(
-    punchIn.format("YYYY-MM-DD") + " " + businessHours.startTime
-  );
+  const officeStart = punchIn
+    .startOf("day")
+    .hour(Number(businessHours.startTime.split(":")[0]))
+    .minute(Number(businessHours.startTime.split(":")[1]));
+
   const graceEnd = officeStart.add(businessHours.graceMinutes, "minute");
 
   if (punchIn.isBefore(officeStart)) return "early";
