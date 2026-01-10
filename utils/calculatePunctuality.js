@@ -2,7 +2,6 @@ import dayjs from "../utils/dayjs.js";
 import businessHours from "../config/businessHours.js";
 
 const calculatePunctuality = (punchInTime) => {
-  // Force business timezone
   const punchIn = dayjs(punchInTime).tz("Asia/Kolkata");
 
   const [startHour, startMinute] = businessHours.startTime
