@@ -7,11 +7,22 @@ import User from "../models/User.model.js";
 export const punchInService = async (userId) => {
   const today = dayjs().format("YYYY-MM-DD");
 
+  const existing = await Attendance.findOne({
+    employee: userId,
+    date: today,
+  });
+
+  if (existing) {
+    throw new Error("Already punched in today");
+  }
+
+  const now = new Date();
+
   const attendance = await Attendance.create({
     employee: userId,
     date: today,
-    punchIn: new Date(),
-    status: calculatePunctuality(new Date()),
+    punchIn: now,
+    status: calculatePunctuality(now),
   });
 
   return attendance;
@@ -33,11 +44,22 @@ export const punchOutService = async (userId) => {
     throw new Error("Already punched out");
   }
 
-  attendance.punchOut = new Date();
-  attendance.totalWorkedHours = calculateWorkedHours(
-    attendance.punchIn,
-    attendance.punchOut
-  );
+  const punchOutTime = new Date();
+
+  attendance.punchOut = punchOutTime;
+
+  const workedHours = calculateWorkedHours(attendance.punchIn, punchOutTime);
+  if (workedHours < 4) {
+    attendance.status = "half-day";
+  }
+
+  attendance.totalWorkedHours = workedHours;
+  const STANDARD_HOURS = 8;
+
+  attendance.overtimeHours =
+    workedHours > STANDARD_HOURS
+      ? Number((workedHours - STANDARD_HOURS).toFixed(2))
+      : 0;
 
   await attendance.save();
   return attendance;

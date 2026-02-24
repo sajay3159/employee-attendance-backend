@@ -15,7 +15,7 @@ const calculatePunctuality = (punchInTime) => {
 
   const graceEnd = officeStart.add(businessHours.graceMinutes, "minute");
 
-  if (punchIn.isBefore(officeStart)) return "early";
+  if (punchIn.isBefore(officeStart.subtract(30, "minute"))) return "early";
   if (punchIn.isAfter(graceEnd)) return "late";
 
   return "on-time";

@@ -4,8 +4,11 @@ import morgan from "morgan";
 import authRoutes from "./routes/auth.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
+import runAttendanceCron from "./cron/attendance.cron.js";
 
 const app = express();
+
+runAttendanceCron();
 
 // Middlewares
 app.use(cors());

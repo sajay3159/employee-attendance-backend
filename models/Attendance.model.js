@@ -9,7 +9,7 @@ const attendanceSchema = new mongoose.Schema(
     },
 
     date: {
-      type: String, // YYYY-MM-DD
+      type: String,
       required: true,
     },
 
@@ -28,10 +28,15 @@ const attendanceSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["early", "on-time", "late"],
+      enum: ["early", "on-time", "late", "half-day", "absent"],
+      required: true,
+    },
+    overtimeHours: {
+      type: Number,
+      default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 attendanceSchema.index({ employee: 1, date: 1 }, { unique: true });
